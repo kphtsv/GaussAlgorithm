@@ -9,7 +9,6 @@
   <component name="ChangeListManager">
     <list default="true" id="43fe8e8e-2888-4bcb-823b-35f5c6e5438a" name="Default Changelist" comment="Almost the solution. Just one test fails">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GaussianAlgorithm.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GaussianAlgorithm.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Folder.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/Folder.DotSettings.user" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Solver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Solver.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/GaussAlgorithm.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/GaussAlgorithm.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/GaussAlgorithm.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/GaussAlgorithm.pdb" afterDir="false" />
@@ -23,6 +22,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
@@ -103,7 +110,7 @@
       <workItem from="1619800507055" duration="2344000" />
       <workItem from="1620320318021" duration="614000" />
       <workItem from="1621571430845" duration="1150000" />
-      <workItem from="1621587104011" duration="3880000" />
+      <workItem from="1621587104011" duration="11608000" />
     </task>
     <task id="LOCAL-00001" summary="Almost the solution. Just one test fails">
       <created>1619156291660</created>
@@ -136,24 +143,5 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Almost the solution. Just one test fails" />
     <option name="LAST_COMMIT_MESSAGE" value="Almost the solution. Just one test fails" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Solver.cs</url>
-          <line>184</line>
-          <properties documentPath="C:\Users\kphts\Downloads\GaussianAlgorithm.csproj\Solver.cs" initialLine="184" containingFunctionPresentation="method 'Solve'">
-            <startOffsets>
-              <option value="6882" />
-            </startOffsets>
-            <endOffsets>
-              <option value="6925" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

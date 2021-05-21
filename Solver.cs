@@ -5,8 +5,6 @@ namespace GaussAlgorithm
 {
     public class Solver
     {
-        // TODO: Implement LINQ!!!
-
         public double[] Solve(double[][] matrix, double[] freeMembers)
         {
             var system = new LinearEquationSystem(matrix, freeMembers);
@@ -14,87 +12,62 @@ namespace GaussAlgorithm
         }
     }
 
-    partial class NoSolutionException : Exception
-    {
-        public NoSolutionException() {}
-    }
-
     public class LinearEquationSystem
     {
         private const double Epsilon = 1e-6;
-        private readonly double[][] _matrix;
-        private readonly double[] _freeMembers;
-        public int Height => _matrix.Length;
-        public int Width => Height > 0 ? _matrix[0].Length : 0;
-        private int _preparedColumnsCount;
-        // private readonly bool[] _dependentVars;
-        private readonly bool[,] _dependentVars;
-        // private int _dependentVarsCount => _dependentVars.Count(x => x);
-        // private bool _isStepMatrix => _preparedColumnsCount == Width;
-        private int _dependentVarsCount;
+        private readonly double[][] matrix;
+        private readonly double[] freeMembers;
+        public int Height => matrix.Length;
+        public int Width => Height > 0 ? matrix[0].Length : 0;
+        private int preparedColumnsCount;
+        private readonly bool[][] dependentVars;
+        private int dependentVarsCount;
 
         public LinearEquationSystem(double[][] matrix, double[] freeMembers)
         {
-            this._matrix = matrix;
-            this._freeMembers = freeMembers;
-            _dependentVars = new bool[Height, Width];
+            this.matrix = matrix;
+            this.freeMembers = freeMembers;
+            
+            dependentVars = new bool[Height][];
+            for (var row = 0; row < Height; row++)
+                dependentVars[row] = new bool [Width];
         }
 
         public void AddMultipliedLine(int resIndex, int addIndex, double multiplier)
         {
             for (var i = 0; i < Width; i++)
             {
-                _matrix[resIndex][i] += multiplier * _matrix[addIndex][i];
-                if (Math.Abs(_matrix[resIndex][i]) < Epsilon) _matrix[resIndex][i] = 0;
+                matrix[resIndex][i] += multiplier * matrix[addIndex][i];
+                if (Math.Abs(matrix[resIndex][i]) < Epsilon) matrix[resIndex][i] = 0;
             }
-            _freeMembers[resIndex] += multiplier * _freeMembers[addIndex];
-            if (Math.Abs(_freeMembers[resIndex]) < Epsilon) _freeMembers[resIndex] = 0;
-
-            Console.WriteLine("Add {0}th line multiplied by {1} to line {2}", addIndex + 1, multiplier, resIndex + 1);
-            ViewMatrix();
+            freeMembers[resIndex] += multiplier * freeMembers[addIndex];
+            if (Math.Abs(freeMembers[resIndex]) < Epsilon) freeMembers[resIndex] = 0;
         }
 
         public void MultiplyLine(int resIndex, double multiplier)
         {
-            _matrix[resIndex] = _matrix[resIndex].Select(x => x * multiplier).ToArray();
-            _freeMembers[resIndex] *= multiplier;
-
-            Console.WriteLine("Multiply line {0} by {1}", resIndex + 1, multiplier);
-            ViewMatrix();
+            matrix[resIndex] = matrix[resIndex].Select(x => x * multiplier).ToArray();
+            freeMembers[resIndex] *= multiplier;
         }
 
         public void SwitchLines(int i, int j)
         {
             if (i < 0 || i >= Height || j < 0 || j >= Height) return;
             
-            var tmpLine = _matrix[i];
-            _matrix[i] = _matrix[j];
-            _matrix[j] = tmpLine;
+            var tmpLine = matrix[i];
+            matrix[i] = matrix[j];
+            matrix[j] = tmpLine;
 
-            var tmp = _freeMembers[i];
-            _freeMembers[i] = _freeMembers[j];
-            _freeMembers[j] = tmp;
+            var tmp = freeMembers[i];
+            freeMembers[i] = freeMembers[j];
+            freeMembers[j] = tmp;
             
-            // здесь надо поменять строки в матрице зависимых переменных тоже!!!
-            /*var tmpLine2 = _matrix[i];
-            _matrix[i] = _matrix[j];
-            _matrix[j] = tmpLine2;*/
-
-            Console.WriteLine("Switched {0} and {1} line", i, j);
-            ViewMatrix();
+            var tmpLine2 = dependentVars[i];
+            dependentVars[i] = dependentVars[j];
+            dependentVars[j] = tmpLine2;
         }
 
-        public void ViewMatrix()
-        {
-            for (var row = 0; row < Height; row++)
-            {
-                foreach (var e in _matrix[row])
-                    Console.Write(e + " ");
-                Console.Write("| " + _freeMembers[row] + "\n");
-            }
-        }
-
-        private bool RowOnlyContainsZeros(int row) => _matrix[row].All(x => x == 0);
+        private bool RowOnlyContainsZeros(int row) => matrix[row].All(x => x == 0);
 
         private void PrepareColumn(int rowIndex, int columnIndex)
         {
@@ -108,18 +81,18 @@ namespace GaussAlgorithm
              */
 
             // Матрица готова.
-            if (_preparedColumnsCount == Width) return;
+            if (preparedColumnsCount == Width) return;
 
             // Случай: ни один делитель в столбце не подошёл (нулевой столбик)
             // Заканчиваем обработку. Столбик готов
             if (rowIndex >= Height)
             {
-                _preparedColumnsCount++;
+                preparedColumnsCount++;
                 return;
             }
 
             // Чтобы m[r][c] == 1, будем делить всю строку на m[r][c] 
-            var divider = _matrix[rowIndex][columnIndex];
+            var divider = matrix[rowIndex][columnIndex];
             if (divider == 0)
             {
                 // На ноль делить нельзя, ищём другого кандидата для делителя
@@ -137,41 +110,25 @@ namespace GaussAlgorithm
             for (var row = 0; row < Height; row++)
             {
                 if (row == rowIndex) continue;
-                AddMultipliedLine(row, rowIndex, -_matrix[row][columnIndex]);
+                AddMultipliedLine(row, rowIndex, -matrix[row][columnIndex]);
             }
 
             // Теперь m[*][c] == 0; m[r][c] == 1.
             // Двигаем строчку наверх.
+            
+            dependentVars[rowIndex][columnIndex] = true;
+            if (rowIndex != preparedColumnsCount)
+                SwitchLines(rowIndex, preparedColumnsCount);
+            preparedColumnsCount++;
+            dependentVarsCount++;
 
-            // TODO TODO
-            if (rowIndex != _preparedColumnsCount)
-                SwitchLines(rowIndex, _preparedColumnsCount);
-            _preparedColumnsCount++;
-            _dependentVars[rowIndex, columnIndex] = true;
-            _dependentVarsCount++;
         }
 
         public double[] Solve()
         {
             // Приводим к ступенчатому виду
-            // TODO: главная ошибка в определении зависимых переменных. Это надо исправлять ЗДЕСЬ
-            // for (var dividerSearchStartIndex = 0; dividerSearchStartIndex < Height; dividerSearchStartIndex++) // было раньше
-            /*for (var dividerSearchStartIndex = 0; _preparedColumnsCount < Width; dividerSearchStartIndex++)
-            {
-                // Мы не хотим начинать искать делитель среди уже подготовленных строк.
-                // Т.к. каждая успешно подготовленная строка сдвигается вверх,
-                // то для этого можно сдвигать начало поиска на 1 вниз на каждой итерации.
-                
-                // if (dividerSearchStartIndex == )
-
-                PrepareColumn(dividerSearchStartIndex, _preparedColumnsCount);
-            }*/
-
-
-            while (_preparedColumnsCount < Width)
-            {
-                PrepareColumn(_dependentVarsCount, _preparedColumnsCount);
-            }
+            while (preparedColumnsCount < Width)
+                PrepareColumn(dependentVarsCount, preparedColumnsCount);
 
             // Теперь матрица имеет ступенчатый вид! Можно это вынести в отдельный метод, кстати.
 
@@ -179,7 +136,7 @@ namespace GaussAlgorithm
             // Если нет -- сразу возвращаем пустое множество решений.
             for (int row = 0; row < Height; row++)
             {
-                if (RowOnlyContainsZeros(row) && _freeMembers[row] != 0)
+                if (RowOnlyContainsZeros(row) && freeMembers[row] != 0)
                     throw new NoSolutionException();
             }
             // Теперь рассматриваем совместную матрицу.
@@ -196,13 +153,13 @@ namespace GaussAlgorithm
                     // x_column -- зависимая переменная
                     // !!! TODO
                     // if (row == column && _dependentVars[column])
-                    if (_dependentVars[row, column])
+                    if (dependentVars[row][column])
                     {
                         // подставляем все найденные ранее значения независимых переменных
                         var sum = 0.0;
                         for (var i = column + 1; i < Width; i++)
-                            sum += _matrix[row][i] * solution[i];
-                        var tmp = (_freeMembers[row] - sum) / _matrix[row][column];
+                            sum += matrix[row][i] * solution[i];
+                        var tmp = (freeMembers[row] - sum) / matrix[row][column];
                         solution[column] = tmp;
                         
                         // подсчёт в строке оканчивается, когда мы доходим до зависимой переменной
