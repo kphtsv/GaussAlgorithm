@@ -137,7 +137,7 @@ namespace GaussAlgorithm
             for (int row = 0; row < Height; row++)
             {
                 if (RowOnlyContainsZeros(row) && freeMembers[row] != 0)
-                    throw new NoSolutionException();
+                    throw new NoSolutionException("No solution!");
             }
             // Теперь рассматриваем совместную матрицу.
             
