@@ -1,0 +1,10 @@
+C:\Users\kphts\Downloads\GaussianAlgorithm.csproj\bin\Debug\GaussAlgorithm.exe.config
+C:\Users\kphts\Downloads\GaussianAlgorithm.csproj\bin\Debug\GaussAlgorithm.exe
+C:\Users\kphts\Downloads\GaussianAlgorithm.csproj\bin\Debug\GaussAlgorithm.pdb
+C:\Users\kphts\Downloads\GaussianAlgorithm.csproj\bin\Debug\nunit.framework.dll
+C:\Users\kphts\Downloads\GaussianAlgorithm.csproj\bin\Debug\nunitlite.dll
+C:\Users\kphts\Downloads\GaussianAlgorithm.csproj\obj\Debug\GaussianAlgorithm.csprojAssemblyReference.cache
+C:\Users\kphts\Downloads\GaussianAlgorithm.csproj\obj\Debug\GaussianAlgorithm.csproj.CoreCompileInputs.cache
+C:\Users\kphts\Downloads\GaussianAlgorithm.csproj\obj\Debug\GaussianAlgorithm.csproj.CopyComplete
+C:\Users\kphts\Downloads\GaussianAlgorithm.csproj\obj\Debug\GaussAlgorithm.exe
+C:\Users\kphts\Downloads\GaussianAlgorithm.csproj\obj\Debug\GaussAlgorithm.pdb
